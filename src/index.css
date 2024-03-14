@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+html,body{
+    width: 100%;
+}
+.hoverable-text {
+    position: relative;
+    display: inline-block;
+    text-decoration: none;
+    overflow: hidden;
+  
+  }
+  
+  .hoverable-text::before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    background-color: #001b38d4;
+    bottom: 0;
+    left: 0%;
+    
+    transform: translateX(0%);
+    transition: width 0.5s ease, left 0.5s ease;
+  }
+  
+  /* Animation on hover */
+  .hoverable-text:hover::before {
+    width: 100%;
+    left: 0%;
+  }
+  
+  
+  /* Style for the link */
+  .hoverable-text,
+  .active {
+    position: relative;
+    display: inline-block;
+    text-decoration: none;
+    overflow: hidden;
+  }
+  
+  /* Style for the line */
+  
+  .react-slideshow-container .default-nav{
+    display: none;
+  }
+
+  
