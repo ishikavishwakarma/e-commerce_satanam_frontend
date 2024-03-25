@@ -1,82 +1,123 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 import Footer from './Footer';
 import Navbar from './Nav';
+import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { createUser, getUserInfo } from "../store/Actions/AuthAction";
+import { useNavigate,Link  } from 'react-router-dom';
 
 const RegisterComponent = () => {
-  const [isLogin, setIsLogin] = useState(true); // Default to login
-
-  const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const { user, error } = useSelector((state) => state.Auth);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const onSubmit = handleSubmit((data) => {
+    dispatch(createUser(data));
   });
+  // const [formData, setFormData] = useState({
+  //   username: '',
+  //   email: '',
+  //   password: '',
+  // });
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  // const handleChange = (e) => {
+  //   setFormData({ ...formData, [e.target.name]: e.target.value });
+  // };
+  useEffect(() => {
+    if (!user) {
+      dispatch(getUserInfo());
+    }
+    if (localStorage.getItem("token") && user) {
+      navigate("/"); // Use history.replace for navigation
+    }
+  }, [user]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Add your authentication logic here
-    console.log('Form Submitted:', formData);
-  };
-
-  const toggleAuthMode = () => {
-    setIsLogin((prevMode) => !prevMode);
-  };
+ 
+ 
   return (
     <>
     <Navbar/>
-    <div className='lg:pt-14 p-16  lg:pl-14'>
-      <p className=' text-[#00000088]'>Home / {isLogin ? 'Log In' : 'Register '}</p>
-<div className="div head flex-col gap-32 lg:flex-row flex">
+    <div className='lg:pt-14 sm:p-16 p-6 lg:pl-14'>
+      <p className=' text-[#00000088]'><a href="/home">Home </a> / Register</p>
+<div className="div head flex-col gap-10 sm:gap-32 lg:flex-row flex">
 
 <div className="flex items-center  w-full  h-fit">
-      <form className="w-[50vw]  h-[25vw]   shadow-xl p-8 rounded ">
-        <h2 className="text-3xl text-[#001B38] font-bold ">{isLogin ? 'Log In' : 'Register '}</h2>
-        <p className='mb-6 text-[#001B38] '>{isLogin ? 'Login to your account to get easy access to your orders, wishlist and recomendations.' : 'Create an account to get easy access to your orders, wishlist and recomendations.'}</p>
-        {!isLogin && (
-         <div className='grid grid-cols-2 gap-2'>   
+      <form noValidate onSubmit={onSubmit} className="sm:w-[50vw] w-full  sm:h-fit   shadow-xl p-10 rounded ">
+        <h2 className="sm:text-3xl text-xl text-[#001B38] font-bold ">Register</h2>
+        <p className='mb-6 pt-5 text-sm sm:text-lg text-[#001B38] '>Create an account to get easy access to your orders, wishlist and recomendations.</p>
+        
+         <div className='grid grid-cols-1 gap-1 sm:grid-cols-2 sm:gap-2'>   
           
                  <div className="mb-4">
          
             <input
               type="text"
-              id="username"
-              placeholder='Username'
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
+              id="name"
+              placeholder='Name'
+              name="name"
+              {...register("name", {
+                required: "Name id is required",
+                // pattern: {
+                //   // value: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+                //   message: "please enter valid Name ",
+                // },
+              })}
               className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-[#001B38]"
-              required
+           
             />
+            {errors?.name && (
+            <p className="text-sm capitalize text-red-500">
+              {errors?.name.message}
+            </p>
+          )}
           </div>
-        <div className="mb-4">
-          
+        <div className="mb-4">  
           <input
-            type="email"
             id="email"
-            name="email"
             placeholder='Email'
-            value={formData.email}
-            onChange={handleChange}
+            name="email"
+            type="email"
+            {...register("email", {
+              required: "email id is required",
+              // pattern: {
+              //   value: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+              //   message: "please enter valid email id",
+              // },
+            })}
             className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-[#001B38]"
-            required
           />
+          {errors?.email && (
+            <p className="text-sm capitalize text-red-500">
+              {errors?.email.message}
+            </p>
+          )}
         </div>
         <div className="mb-4">
           
           <input
             type="number"
-            id="Mobile"
-            name="mobile"
-            placeholder='Mobile'
-            value={formData.mobile}
-            onChange={handleChange}
+            id="phoneNo"
+            name="phoneNo"
+            placeholder='PhoneNo'
+            {...register("phoneNo", {
+              required: "phoneNo id is required",
+              // pattern: {
+              //   value: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+              //   message: "please enter valid phone No",
+              // },
+            })}
             className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-[#001B38]"
-            required
+           
           />
+          {errors?.email && (
+            <p className="text-sm capitalize text-red-500">
+              {errors?.email.message}
+            </p>
+          )}
         </div>
         <div className="mb-6">
           
@@ -84,63 +125,65 @@ const RegisterComponent = () => {
             type="password"
             id="password"
             name="password"
-            value={formData.password}
-            onChange={handleChange}
+            {...register("password", {
+              required: "password id is required",
+              // pattern: {
+              //   value: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+              //   message: "please enter valid password ",
+              // },
+            })}
             className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-[#001B38]"
-            required
+         
           />
+           {errors?.password && (
+                  <p className="text-sm capitalize text-red-500">
+                    {errors?.password.message}
+                  </p>
+                )}
         </div>
-        </div>
-        )}
-        {isLogin && (
-          <div className="div grid grid-cols-2 gap-2">
-             <div className="mb-4">
-          
-          <input
-            type="email"
-            id="email"
-            name="email"
-            placeholder='Email'
-            value={formData.email}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-[#001B38]"
-            required
-          />
-        </div>
-     
         <div className="mb-6">
           
           <input placeholder='Password'
+            id="password-conform"
+            name="password-conform"
             type="password"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
+            {...register("passwordConform", {
+              required: "Conform password is required",
+              validate: (value, formValues) =>
+                value === formValues.password || "password not match",
+            })}
             className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-[#001B38]"
-            required
+         
           />
+            {errors?.passwordConform && (
+                  <p className="text-sm capitalize text-red-500">
+                    {errors?.passwordConform.message}
+                  </p>
+                )}
         </div>
-          </div>
-        )}
+        {/* {error} */}
+        </div>
+       
+        
         <button
           type="submit"
           onClick={handleSubmit}
           className="bg-[#001B38] text-white px-4 py-2 rounded hover:bg-[#001B38] focus:outline-none"
         >
-          {isLogin ? 'Log In' : 'Sign Up'}
+     Sign Up
         </button>
         <p className="text-sm text-[#000000c7] mt-4">
-          {isLogin ? "Don't have an account?" : 'Already have an account?'}{' '}
-          <button
-            onClick={toggleAuthMode}
+          Already have an account?
+          <a
+            href='/login'
             className="text-[#001B38] font-[600] hover:underline focus:outline-none"
           >
-            {isLogin ? 'Sign Up' : 'Log In'}
-          </button>
+            Log In
+          </a>
         </p>
       </form>
     </div>
-    <div className="img  h-[400px] w-[450px] ">
+    <div className="img h-96 w-88 sm:h-[400px] sm:w-[450px] ">
         <img src="/images/image1.jpeg" className='h-full object-cover w-full' alt="" />
        </div>
 </div>

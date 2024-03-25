@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import 'react-circular-progressbar/dist/styles.css';
 import { CircularProgressbar } from 'react-circular-progressbar';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUserInfo } from '../store/Actions/AuthAction';
+import { useNavigate } from 'react-router-dom';
 // import {Colors} from ('tailwindcss/colors')
 
 
 const HomeMid = () => {
-
+  const { user,ischeckUser, loadingUser, error } = useSelector((state) => state.Auth);
   const progressBars = [
     { maxPercentage: 80, title: 'DENTAL TREATMENT' },
     { maxPercentage: 90, title: 'FREE SERVICE' },
@@ -13,8 +16,11 @@ const HomeMid = () => {
     { maxPercentage: 85, title: 'SANATAN SANDESH' },
     // Add more objects for additional progress bars
   ];
-  
-// 14 years in seconds
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!user) dispatch(getUserInfo());
+  }, [user, ischeckUser]);
 
   return (
     <div>
@@ -24,7 +30,7 @@ const HomeMid = () => {
       
       <div className="mb-4 ">
         <p className="text-2xl sm:text-4xl text-seconddary text-center font-bold">
-          Mission Muskan Dwarikamai by Dasganu Welfare Foundation
+          Mission  Muskan Dwarikamai by Dasganu Welfare Foundation
         </p>
         <p className="mt-1 text-base text-colors.myfirst text-center">
           Dental hospital is being run in Barabanki through which dental treatment is being provided almost free of cost.
@@ -34,14 +40,14 @@ const HomeMid = () => {
         <p className="text-lg text-center font-bold">
           आप सभी लोगो को जय श्री राम शिरडी साई बाबा के आदेश से अब से इस पेज का नाम सनातन संदेश होगा
         </p>
-        <p className="mt-2">
+        <p className="mt-2 text-center">
           जैसे बाबा ने शिरडी में शिव मंदिर गणेश मंदिर लक्ष्मी मंदिर बनवाकर सनातन धर्म को बढ़ाने का संदेश दिया है अब से सनातन संदेश भी यही कार्य करेगा
         </p>
       </div>
       <div className="w-full flex items-center justify-around place-items-center">
      
       <div>
-        <div className="div flex    sm:gap-20  pt-10">
+        <div className="div flex w-full lg:gap-10 md:gap-1 sm:gap-20  pt-10">
         {/* <div className="div h-52 w-52 ">
         <img src="../../public/images/image1.jpeg"  className='h-full w-full bg-transparent' alt="" />
       </div>
@@ -90,9 +96,9 @@ const ProgressBar = ({ maxPercentage , title}) => {
   const calculatePercentage = (value) => (value / maxPercentage) * maxPercentage;
 
   return (
-    <div className="p-4 text-center flex items-center flex-col">
+    <div className="p-4 text-center   flex items-center flex-col">
       <CircularProgressbar
-      className=' rounded-md sm:h-20 sm:w-32'
+      className=' rounded-md h-14 w-10 sm:h-20 sm:w-32'
         value={calculatePercentage(customerCountdown)}
         text={customerCountdown.toString()}
         styles={{

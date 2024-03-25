@@ -2,47 +2,48 @@ import React, { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { RxCross2, RxHamburgerMenu } from "react-icons/rx";
 import { FaBagShopping, FaUser } from "react-icons/fa6";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Slide } from "react-slideshow-image";
 import "react-slideshow-image/dist/styles.css";
+import { useDispatch, useSelector } from "react-redux";
+import { getUserInfo, logoutAyc } from "../store/Actions/AuthAction";
+
 
 // import { useHistory } from "react-router-dom";
 
 const Navbar = () => {
   const [navbar, setNavbar] = useState(false);
   // const history = useHistory();
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
   const dropdownRef = useRef(null);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const handleDropdownToggle = () => {
-    setIsDropdownOpen((prevIsOpen) => !prevIsOpen);
-  };
-
-  const handleClickOutside = (event) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-      setIsDropdownOpen(false);
-    }
-  };
-
+  const { user,ischeckUser, error, LoginUser, loadingUser } = useSelector(
+    (state) => state.Auth
+  );
   useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+    if (!user) dispatch(getUserInfo());
+  }, [user, ischeckUser]);
+  const handleLogout = () => {
+    navigate("/login") // Dispatch the logout action when the button is clicked
+    dispatch(logoutAyc());
+  };
+
 
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
       const shouldBeVisible = scrollY <= 0; // Hide when scrolled down 1px or more
-      setIsVisible(shouldBeVisible);
+   
     };
 
     window.addEventListener("scroll", handleScroll);
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
+ 
+ 
   const handleMenuClick = () => {
     setNavbar(!navbar);
   };
@@ -70,8 +71,8 @@ const Navbar = () => {
   ];
 
   return (
-    <div>
-      <div className="nav-1  bg-[#f0eaea] overflow-hidden">
+    <div className="">
+      <div className="nav-1 lg:w-full  bg-[#f0eaea] overflow-hidden">
         {/* <motion.div
       className="marquee bg-[#f0eaea] p-1 overflow-hidden whitespace-nowrap flex items-center gap-3 font-semibold"
       animate={{ x: '0%' }}
@@ -157,17 +158,27 @@ const Navbar = () => {
 
                 <li className="flex items-center hover:text-[#001B38] gap-2">
                   {" "}
-                  <Link to="/AddtoCart">
+                  <Link to="/cardPage">
                     <FaBagShopping />
                   </Link>
                 </li>
                 <li className="flex hover:text-[#001B38] items-center gap-2">
                   {" "}
-                  <Link to="/register">
+                  {/* <Link to={"/register"}> */}
+                  <Link to={user? "/profile" :"/register"}>
                     <FaUser />
                   </Link>
                 </li>
-                <li
+                {/* {user &&<li>
+                <button
+                        
+                        onClick={handleLogout}
+                        className="block text-base text-seconddary px-4 py-2 hover:text-black hover:bg-gray-100"
+                      >
+                        Sign Out
+                      </button>
+                </li>} */}
+                {/* <li
                   className="flex hover:text-[#C0800A] items-center gap-2 relative"
                   ref={dropdownRef}
                 >
@@ -176,24 +187,25 @@ const Navbar = () => {
                     className="block  h-8 w-8 bg-black rounded-full md:bg-black md:p-0 hoverable-text"
                   ></button>
                   {isDropdownOpen && (
-                    <div className="absolute top-14 text-black left-0 z-40 bg-white  w-40  mt-1">
+                    <div className="absolute top-14 text-black right z-40 bg-white  w-40  mt-1">
                       <Link
                         to="/Profile"
                         onClick={() => handleLinkClick("/dropdown-link-1")}
-                        className="block px-4 py-2 hover:text-black hover:bg-gray-100"
+                        className="block text-base text-seconddary px-4 py-2 hover:text-black hover:bg-gray-100"
                       >
                         Profile
                       </Link>
-                      <Link
-                        to="/Sign-Out"
-                        onClick={() => handleLinkClick("/dropdown-link-2")}
-                        className="block px-4 py-2 hover:text-black hover:bg-gray-100"
+                      
+                      <button
+                        
+                        onClick={handleLogout}
+                        className="block text-base text-seconddary px-4 py-2 hover:text-black hover:bg-gray-100"
                       >
                         Sign Out
-                      </Link>
+                      </button>
                     </div>
                   )}
-                </li>
+                </li> */}
               </ul>
             </nav>
           </div>
@@ -214,13 +226,13 @@ const Navbar = () => {
         </div>
 
         {navbar && (
-          <div className="md:hidden bg-[#ffffff8c] text-black flex flex-col px-[10px] py-[20px] text-sm gap-3 absolute w-full z-30 animateNav overflow-hidden">
+          <div className="md:hidden bg-[#0C2641] text-white flex flex-col px-[10px] py-[20px] text-sm gap-3 absolute w-full z-30 animateNav overflow-hidden">
             <div className="flex flex-col h-[40px] px-[30px]  ">
-              <div className="flex gap-1 hover:text-[#FAB207]  h-full hover:bg-[#111111] items-center ">
+              <div className="flex gap-1 hover:text-[#0C2641]  h-full hover:bg-[#fff] items-center ">
                 <Link
                   to="/"
                   onClick={() => handleLinkClick("/")}
-                  className="px-[10px]"
+                  className="px-[10px] w-full"
                 >
                   Home
                 </Link>
@@ -232,11 +244,11 @@ const Navbar = () => {
             </div>
 
             <div className="flex flex-col h-[40px] px-[30px]  ">
-              <div className="flex gap-1 hover:text-[#FAB207]  h-full hover:bg-[#111111] items-center ">
+              <div className="flex gap-1 hover:text-[#0C2641]  h-full hover:bg-[#fff] items-center ">
                 <Link
                   to="/about"
                   onClick={() => handleLinkClick("/about")}
-                  className="px-[10px]"
+                  className="px-[10px] w-full"
                 >
                   About
                 </Link>
@@ -248,11 +260,11 @@ const Navbar = () => {
             </div>
 
             <div className="flex flex-col h-[40px] px-[30px]  ">
-              <div className="flex gap-1 hover:text-[#FAB207]  h-full hover:bg-[#111111] items-center ">
+              <div className="flex gap-1 hover:text-[#0C2641]  h-full hover:bg-[#fff] items-center ">
                 <Link
                   to="/store"
                   onClick={() => handleLinkClick("/store")}
-                  className="px-[10px]"
+                  className="px-[10px] w-full"
                 >
                   Store
                 </Link>
@@ -264,11 +276,11 @@ const Navbar = () => {
             </div>
 
             <div className="flex flex-col h-[40px] px-[30px]  ">
-              <div className="flex gap-1 hover:text-[#FAB207]  h-full hover:bg-[#111111] items-center ">
+              <div className="flex gap-1 hover:text-[#0C2641]  h-full hover:bg-[#fff] items-center ">
                 <Link
                   to="/contact"
                   onClick={() => handleLinkClick("/contact")}
-                  className="px-[10px]"
+                  className="w-full px-[10px]"
                 >
                   Contact Us
                 </Link>
@@ -279,11 +291,26 @@ const Navbar = () => {
               </div>
             </div>
             <div className="flex flex-col h-[40px] px-[30px]  ">
-              <div className="flex gap-1 hover:text-[#FAB207]  h-full hover:bg-[#111111] items-center ">
+              <div className="flex gap-1 hover:text-[#0C2641]  h-full hover:bg-[#fff] items-center ">
                 <Link
-                  to="/contact"
+                 to={user? "/profile" :"/register"}
                   onClick={() => handleLinkClick("/contact")}
-                  className="px-[10px]"
+                  className="w-full px-[10px]"
+                >
+                  {user ?"Profile":"Register"}
+                </Link>
+              </div>
+
+              <div className="w-[100%] h-fit flex items-center justify-center">
+                <p className="h-[.2px] opacity-[0.5] w-[100%] bg-[#dadada]"></p>
+              </div>
+            </div>
+            <div className="flex flex-col h-[40px] px-[30px]  ">
+              <div className="flex gap-1 hover:text-[#0C2641]  h-full hover:bg-[#fff] items-center ">
+                <Link
+                
+                 
+                  className=" w-full px-[10px]"
                 >
                   Sign Out
                 </Link>
