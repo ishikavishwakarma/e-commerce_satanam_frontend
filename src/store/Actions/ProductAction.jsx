@@ -69,11 +69,12 @@ export const getAllCategories = () => async (dispatch, getState) => {
     dispatch(setError(err.message || "Failed to fetch categories"));
   }
 };
-export const allFilteredProducts = (filters ) => async (dispatch) => {
+export const allFilteredProducts = (filters ={}) => async (dispatch) => {
   console.log(filters)
   try {
       dispatch(setLoading());
       const res  = await axios.post(`${baseUrl}/products/filter/product`, filters);
+      // console.log(res.data)
       const totalItems = await res.headers.get("X-Total-Count");
       dispatch(setProducts({ data: { allProducts: res.data , totalItems } }));
   } catch (error) {

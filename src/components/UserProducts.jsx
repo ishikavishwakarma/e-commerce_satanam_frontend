@@ -33,7 +33,7 @@ const UserProducts = () => {
       const { AllCard } = useSelector((state) => state.Card);
     
       const navigate = useNavigate();
-      const [filterValue, setFilterValue] = useState([]);
+    
       const [sort, setSort] = useState({});
       const [page, setPage] = useState(1);
     
@@ -64,41 +64,84 @@ const UserProducts = () => {
       /* filter */
       const filters = [
         {
-          id: "category",
-          name: "category",
+          id: "Category",
+          name: "Category",
           options: categories || [],
         },
+        
+      ];
+      const priceOptions = [
+        { id: 1, value: '10 to 200', options: { minPrice: 10, maxPrice: 200 } },
+        { id: 2, value: '200 to 500', options: { minPrice: 200, maxPrice: 500 } },
+        { id: 3, value: '500 to 1000', options: { minPrice: 500, maxPrice: 1000 } },
+        { id: 4, value: '1000 to 3000', options: { minPrice: 1000, maxPrice: 3000 } },
+        { id: 5, value: '3000 to 5000', options: { minPrice: 3000, maxPrice: 5000 } },
+        { id: 6, value: '5000 to 10000', options: { minPrice: 5000, maxPrice: 10000 } }
+      ];
+      const prices = [
         {
-          id: "brand",
-          name: "brand",
-          options: brands || [],
+          id: "prices",
+          name: "prices",
+          options: priceOptions || [],
         },
+        
       ];
       function classNames(...classes) {
         return classes.filter(Boolean).join(" ");
       }
-      const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+      const [selectedFilters, setSelectedFilters] = useState({
+        categories: [],
+        colors: [],
+        price: ''
+      });
     
-      /* filter------------------------ */
-      function handelFilter(e, section, value) {
-        let newFilter = { ...filterValue };
-        if (e.target.checked) {
-    if (newFilter[section]) {
-      newFilter[section].push(value);
-    } else {
-      newFilter[section] = [value];
-    }
-  } else {
-    if (newFilter[section]) {
-      const index = newFilter[section].indexOf(value);
-      if (index !== -1) {
-        newFilter[section].splice(index, 1);
-      }
-    }
-  }
-// console.log(newFilter)
-  dispatch(allFilteredProducts(newFilter));
-      }
+      useEffect(() => {
+        // Fetch products when component mounts and when filters change
+        dispatch(allFilteredProducts(selectedFilters));
+      }, [dispatch, selectedFilters]);
+      const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+      const handleCheckboxChange = (filterType, value) => {
+        setSelectedFilters(prevFilters => ({
+          ...prevFilters,
+          [filterType]: prevFilters[filterType].includes(value)
+            ? prevFilters[filterType].filter(item => item !== value)
+            : [...prevFilters[filterType], value]
+        }));
+      };
+       const handlePriceChange = (filterType, value) => {
+     const { minPrice, maxPrice } = value;
+  const isSelected = selectedFilters.price && 
+                     selectedFilters.price.minPrice === minPrice &&
+                     selectedFilters.price.maxPrice === maxPrice;
+
+  setSelectedFilters(prevFilters => ({
+    ...prevFilters,
+    [filterType]: isSelected
+      ? null
+      : { minPrice, maxPrice }
+  }));
+  };
+//       const [filterValue, setFilterValue] = useState([]);
+//       /* filter------------------------ */
+//       function handelFilter(e, section, value) {
+//         let newFilter = { ...filterValue };
+//         if (e.target.checked) {
+//     if (newFilter[section]) {
+//       newFilter[section].push(value);
+//     } else {
+//       newFilter[section] = [value];
+//     }
+//   } else {
+//     if (newFilter[section]) {
+//       const index = newFilter[section].indexOf(value);
+//       if (index !== -1) {
+//         newFilter[section].splice(index, 1);
+//       }
+//     }
+//   }
+// // console.log(newFilter)
+//   dispatch(allFilteredProducts(newFilter));
+//       }
     
       function handelSort(e, option) {
         let sort = {
@@ -228,8 +271,8 @@ const UserProducts = () => {
                                             defaultValue={option.value}
                                             type="checkbox"
                                            
-                                            onClick={(e) =>
-                                              handelFilter(
+                                            onChange={(e) =>
+                                              handleCheckboxChange(
                                                 e,
                                                 section.id,
                                                 option.value
@@ -375,32 +418,84 @@ const UserProducts = () => {
                               </Disclosure.Button>
                             </h3>
                             <Disclosure.Panel className="pt-6">
-                              <div className="space-y-4">
+                            <div className="space-y-4">
                                 {section?.options?.map((option, optionIdx) => (
                                   <div
                                     key={option.value}
                                     className="flex items-center"
                                   >
                                     <input
-                                      id={`filter-${section.id}-${optionIdx}`}
+                                     
                                       name={option.value}
-                                      defaultValue={option.value}
+                                      
                                       type="checkbox"
-                                      defaultChecked={option.checked}
-                                      onClick={(e) =>
-                                        handelFilter(
-                                          e,
-                                          section.id,
-                                          option.value
-                                        )
-                                      }
+                                      checked={selectedFilters.categories.includes(option.value)}
+                                      onChange={() => handleCheckboxChange('categories', option.value)}
                                       className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                                     />
                                     <label
                                       htmlFor={`filter-${section.id}-${optionIdx}`}
                                       className="ml-3 text-sm text-gray-600"
                                     >
-                                      {option.label}
+                                      {option.value}
+                                    </label>
+                                  </div>
+                                ))}
+                              </div>
+                            </Disclosure.Panel>
+                          </>
+                        )}
+                      </Disclosure>
+                    ))}
+                    {prices.map((section) => (
+                      <Disclosure
+                        as="div"
+                        key={section.id}
+                        className="border-b border-gray-200 py-6"
+                      >
+                        {({ open }) => (
+                          <>
+                            <h3 className="-my-3 flow-root">
+                              <Disclosure.Button className="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
+                                <span className="font-medium text-gray-900">
+                                  {section.name}
+                                </span>
+                                <span className="ml-6 flex items-center">
+                                  {open ? (
+                                    <MinusIcon
+                                      className="h-5 w-5"
+                                      aria-hidden="true"
+                                    />
+                                  ) : (
+                                    <PlusIcon
+                                      className="h-5 w-5"
+                                      aria-hidden="true"
+                                    />
+                                  )}
+                                </span>
+                              </Disclosure.Button>
+                            </h3>
+                            <Disclosure.Panel className="pt-6">
+                            <div className="space-y-4">
+                                {section?.options?.map((option, optionIdx) => (
+                                  <div
+                                    key={option.value}
+                                    className="flex items-center"
+                                  >
+                                    <input
+                                     
+                                      name={option.value}
+                                      
+                                      type="checkbox"
+                                      checked={selectedFilters.price.includes(option.value)}
+                                      onChange={() => handleCheckboxChange('price', option.value)}
+                                      className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                    />
+                                    <label
+                                      htmlFor={`filter-${section.id}-${optionIdx}`}
+                                      className="ml-3 text-sm text-gray-600"
+                                    >
+                                      {option.value}
                                     </label>
                                   </div>
                                 ))}

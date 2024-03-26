@@ -228,3 +228,16 @@ export const EditOrder = (id, status) => async (dispatch, getState) => {
     console.log(err, "Error");
   }
 };
+export const allFilteredProducts = (filters ={}) => async (dispatch) => {
+  console.log(filters)
+  try {
+      dispatch(setLoading());
+      const res  = await axios.post(`${basePath}/products/filter/product`, filters);
+      console.log(res.data)
+      const totalItems = await res.headers.get("X-Total-Count");
+      dispatch(setProducts({ data: { allProducts: res.data , totalItems } }));
+  } catch (error) {
+    console.error("Error fetching filtered products:", error);
+      dispatch(setError(error.message || "Failed to fetch filtered products"));
+  }
+};
