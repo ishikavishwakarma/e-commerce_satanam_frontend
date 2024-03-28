@@ -218,19 +218,19 @@ const EditProducts = () => {
                   category
                 </label>
                 <div className="mt-2">
-                  <select
+                  <input
+                   value={id && productById.category}
+                   type="text"
                     id="category"
                     name="category"
-                    autoComplete="category-name"
+                   
                     {...register("category", {
                       required: "category is required",
                     })}
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                   >
-                    {categories.map((item, index) => {
-                      return <option value={item.value} className="h-44 w-full" key={index}>{item.value}</option>;
-                    })}
-                  </select>
+                   
+                  </input>
                 </div>
                 {errors?.categories && (
                   <p className="text-sm capitalize text-red-500">

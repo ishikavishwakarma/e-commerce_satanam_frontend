@@ -446,6 +446,7 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { userAddressUpdate } from "../store/Actions/AuthAction";
 import { Link } from "react-router-dom";
+import { Slide } from "react-slideshow-image";
 
 const CheackOutPage = () => {
   const [open, setOpen] = useState(true);
@@ -569,15 +570,46 @@ const CheackOutPage = () => {
     //   router.push("/OderSuccessfull/" + currentOrder?.id);
     // }
   }
-
+  const slideImages = [
+    {
+      // url:'https://images.unsplash.com/photo-1558659616-7742131dcfbb?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      url: "../../images/_54fbb8cd-2b3e-4482-b647-743e65c35bd1-removebg.png",
+      caption: "Sanatan Sandesh",
+    },
+    {
+      // url: 'https://images.unsplash.com/photo-1506710507565-203b9f24669b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1536&q=80',
+      url: "../../images/_54fbb8cd-2b3e-4482-b647-743e65c35bd1-removebg.png",
+      caption: "Sanatan Sandesh",
+    },
+    {
+      url: "../../images/_54fbb8cd-2b3e-4482-b647-743e65c35bd1-removebg.png",
+      caption: "Sanatan Sandesh",
+    },
+  ];
 
 
   return (
     <>
+    <div className="slide-container w-full bg-[#001B38]  h-[7vh] pt-1 bg-cover max-sm:w-full  opacity-95 bg-center">
+          <Slide indicators={false}>
+            {slideImages.map((slideImage, index) => (
+              <div
+                className="flex justify-center h-full w-full pt-1 items-center"
+                key={index}
+              >
+                {/* <div className='h-[5vh]  object-cover w-[2.5vw]'  
+              >
+                <img className="h-full w-full object-cover" src={slideImage.url} alt="" />
+              </div> */}
+                <span className="text-xl text-white">{slideImage.caption}</span>
+              </div>
+            ))}
+          </Slide>
+        </div>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-5">
+        <div className="grid grid-cols-1 gap-x-2 gap-y-2 md:gap-y-2 sm:gap-y-2 lg:gap-x-8 lg:gap-y-10 lg:grid-cols-5">
           <div className="lg:col-span-3 ">
-            <form className="bg-white mt-12 px-5 py-10" onSubmit={onSubmit}>
+            <form className="bg-white sm:mt-2 lg:mt-12 px-5 py-10" onSubmit={onSubmit}>
               <div className="space-y-12">
                 <div className="space-y-12">
                   <div className="border-b border-gray-900/10 pb-12">
@@ -639,7 +671,7 @@ const CheackOutPage = () => {
                         )}
                       </div>
 
-                      <div className="sm:col-span-4">
+                      <div className="sm:col-span-3">
                         <label
                           htmlFor="email"
                           className="block text-sm font-medium leading-6 text-gray-900"
@@ -811,12 +843,10 @@ const CheackOutPage = () => {
                   <div className="border-b border-gray-900/10 pb-12">
                     <div className="mt-10 space-y-10">
                       <fieldset>
-                        <legend className="text-sm font-semibold leading-6 text-gray-900">
+                        <legend className="text-base font-semibold leading-6 text-gray-900">
                           Address
                         </legend>
-                        <p className="mt-1 text-sm leading-6 text-gray-600">
-                          Choose from existing address
-                        </p>
+                        
                         <div className="mt-6 space-y-6">
                           <ul role="list" className="divide-y divide-gray-100">
                             {user?.addresses?.map((address, i) => (
@@ -923,7 +953,7 @@ const CheackOutPage = () => {
                 <div className="flow-root">
                   <ul role="list" className="-my-6 divide-y divide-gray-200">
                     <h1 className="text-4xl font-bold tracking-tight text-gray-900 p-4">
-                      Card
+                      Cart
                     </h1>
                     {items?.map((product) => (
                       <li key={product.id} className="flex py-6">

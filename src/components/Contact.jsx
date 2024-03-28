@@ -2,6 +2,9 @@ import React from 'react'
 import Nav from './Nav'
 import Navbar from './Nav'
 import Footer from './Footer'
+import { AiOutlineShoppingCart } from 'react-icons/ai'
+import { TbTruckDelivery } from 'react-icons/tb'
+import { GiWaterRecycling } from 'react-icons/gi'
 
 const Contact = () => {
   return (
@@ -59,7 +62,38 @@ const Contact = () => {
         </div>
       
     </div>
-    <div className="div bg-[#001b387e] h-[50vh]"></div>
+    <div className="div p-5 "> <div className="div flex lg:flex-row flex-col lg:pt-16 gap-10 lg:gap-5 xl:gap-20 h-full lg:h-[50vh] xl:h-[45vh] w-full ">
+        <div className="div h-full p-3 rounded-lg border-2 border-[#001b382f] w-full xl:w-[400px]  gap-7 flex flex-col items-center justify-center ">
+          <div className="div gap-2 flex flex-col items-center justify-center">
+          <div className="div lg:h-16 w-7 lg:w-16 ">
+          <GiWaterRecycling className='h-full w-full  text-[#001b38be]' />
+          </div>
+          <p className='text-xl text-center lg:text-lg font-[600] text-[#787878]'>Green Cycle: Sustainable Solutions</p>
+          </div>
+          <p className="text-base xl:text-base lg:text-sm lg:w-full leading-5 w-[90%] font-['gilroy']  font-[700] text-center">Revolutionizing sustainability through our product recycling initiatives, we turn today's waste into tomorrow's resources, creating a greener and cleaner world</p>
+        
+        </div>
+        <div className="div h-full p-3 rounded-lg border-2 border-[#001b382f] xl:w-[400px]  gap-7 flex flex-col items-center justify-center ">
+        <div className="div gap-2 flex flex-col items-center justify-center">
+          <div className="div lg:h-16 w-10 lg:w-16 ">
+          <TbTruckDelivery  className='h-full w-full  text-[#001b38be]' />
+          </div>
+          <p className='text-xl text-center font-[600] text-[#787878]'> Ensuring Safe Delivery Head for Products</p>
+          </div>
+          <p className="text-base xl:text-base leading-5  lg:text-sm lg:w-full font-['gilroy']  font-[700] text-center">We ensures the secure delivery of your products with advanced security features, providing peace of mind throughout the shipping process.</p>
+        
+        </div>
+        <div className="div h-full p-3 rounded-lg border-2 border-[#001b382f] xl:w-[400px]  gap-7 flex flex-col items-center justify-center ">
+        <div className="div gap-2 flex flex-col items-center justify-center">
+          <div className="div lg:h-16 w-10 lg:w-16 ">
+          <AiOutlineShoppingCart className='h-full w-full  text-[#001b38be]' />
+          </div>
+          <p className='text-xl text-center font-[600] text-[#787878]'>Unveiling the Pinnacle of Quality Products</p>
+          </div>
+          <p className="text-base xl:text-base leading-5 lg:text-sm lg:w-full font-['gilroy']  font-[700] text-center">Elevate your standards with our meticulously crafted quality products, setting the benchmark for excellence in every aspect.</p>
+        
+        </div>
+       </div></div>
         <Footer/>
     </>
   )

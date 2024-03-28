@@ -31,9 +31,9 @@ const AllAdminUsers = () => {
         if (!user) dispatch(getUserInfo());
       }, [user, ischeckUser]);
   return user && (
-    <div className='relative '>
-        <div
-        className={`bg-[#0C2641] absolute z-20 min-h-full ${
+    <div className='relative'>
+       <div
+        className={`bg-[#0C2641] fixed z-20 min-h-full ${
           open ? "w-72" : "w-16"
         }  duration-500 text-gray-100 px-4`}
       >
@@ -44,7 +44,7 @@ const AllAdminUsers = () => {
             onClick={() => setOpen(!open)}
           />
         </div>
-        <div className="mt-4  h-screen flex flex-col gap-4 relative">
+        <div className="mt-4 flex flex-col gap-4 relative">
           {menus?.map((menu, i) => (
             <Link
               to={menu?.link}
@@ -53,7 +53,7 @@ const AllAdminUsers = () => {
                 menu?.margin && "mt-5"
               } group flex items-center text-sm  gap-3.5 font-medium p-2 hover:bg-gray-800 rounded-md`}
             >
-              <div>{React.createElement(menu?.icon, { size: "20" })}</div>
+              <div className='sm:text-lg'>{React.createElement(menu?.icon, { size: "20" })}</div>
               <h2
                 style={{
                   transitionDelay: `${i + 3}00ms`,
@@ -75,20 +75,20 @@ const AllAdminUsers = () => {
           ))}
         </div>
       </div>
-      <div className="div h-[100vh] top-0 pl-20 absolute w-full p-5">
-      <div className="flex justify-between top-0 gap-3 sm:gap-5 w-full h-fit ">
+      <div className="div  h-screen top-0 pl-20 absolute w-full p-5">
+      <div className="flex justify-between gap-3 top-0 lg:gap-5 sm:gap-5 w-full h-fit ">
              
-             <div className="relative w-[50%] sm:w-[22vw] h-10">
+             <div className="relative w-96 sm:w-[70vw] lg:w-[50%] md:w-[22vw] h-10">
                <input
                  className="peer w-full h-full bg-transparent text-gray-700 font-sans font-normal outline outline-0 focus:outline-0 disabled:bg-blue-gray-50 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-2.5 rounded-[7px] border-blue-gray-200 focus:border-blue-500"
                  placeholder=" "
                />
-               <label className="flex w-full h-full select-none pointer-events-none absolute left-0 font-normal peer-placeholder-shown:text-gray-500 leading-tight peer-focus:leading-tight peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500 transition-all -top-1.5 peer-placeholder-shown:text-sm text-[11px] peer-focus:text-[11px] before:content[' '] before:block before:box-border before:w-2.5 before:h-1.5 before:mt-[6.5px] before:mr-1 peer-placeholder-shown:before:border-transparent before:rounded-tl-md before:border-t peer-focus:before:border-t-2 before:border-l peer-focus:before:border-l-2 before:pointer-events-none before:transition-all peer-disabled:before:border-transparent after:content[' '] after:block after:flex-grow after:box-border after:w-2.5 after:h-1.5 after:mt-[6.5px] after:ml-1 peer-placeholder-shown:after:border-transparent after:rounded-tr-md after:border-t peer-focus:after:border-t-2 after:border-r peer-focus:after:border-r-2 after:pointer-events-none after:transition-all peer-disabled:after:border-transparent peer-placeholder-shown:leading-[3.75] text-blue-gray-400 peer-focus:text-blue-500 before:border-blue-gray-200 peer-focus:before:border-blue-500 after:border-blue-gray-200 peer-focus:after:border-blue-500">
+               <label className="flex w-full h-full select-none pointer-events-none  absolute left-0 font-normal peer-placeholder-shown:text-gray-500 leading-tight peer-focus:leading-tight peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500 transition-all -top-1.5 peer-placeholder-shown:text-sm text-[11px] peer-focus:text-[11px] before:content[' '] before:block before:box-border before:w-2.5 before:h-1.5 before:mt-[6.5px] before:mr-1 peer-placeholder-shown:before:border-transparent before:rounded-tl-md before:border-t peer-focus:before:border-t-2 before:border-l peer-focus:before:border-l-2 before:pointer-events-none before:transition-all peer-disabled:before:border-transparent after:content[' '] after:block after:flex-grow after:box-border after:w-2.5 after:h-1.5 after:mt-[6.5px] after:ml-1 peer-placeholder-shown:after:border-transparent after:rounded-tr-md after:border-t peer-focus:after:border-t-2 after:border-r peer-focus:after:border-r-2 after:pointer-events-none after:transition-all peer-disabled:after:border-transparent peer-placeholder-shown:leading-[3.75] text-blue-gray-400 peer-focus:text-blue-500 before:border-blue-gray-200 peer-focus:before:border-blue-500 after:border-blue-gray-200 peer-focus:after:border-blue-500">
                  Type here
                </label>
              </div>
            
-          <div className="div h-10 sm:w-[30%] w-[50%]  gap-5 flex">
+          <div className="div h-10 w-[50vw] items-center lg:w-[20%] sm:w-[30%]   gap-5 flex">
 
          
              <button
@@ -112,7 +112,7 @@ const AllAdminUsers = () => {
            
      
 
-          <div className="div rounded-full bg-seconddary   h-7 w-7 ">
+          <div className="div rounded-full bg-seconddary h-10 w-10  lg:h-7 lg:w-7 ">
 <img className="h-full object-cover rounded-full w-full" src="https://pujacraft.com/cdn/shop/articles/Krishna-Janmashtami--2023-date1_64f79e1e5e4f8.jpg?v=1693982466" alt="" />
           </div>
            <button
@@ -141,25 +141,28 @@ const AllAdminUsers = () => {
           </div>
           
          </div>
-         <div className="div p-0 top-1 lg:p-10 gap-5 flex flex-col  text-seconddary">
+         <div className="div p-0 top-1 py-10 lg:p-10 gap-10 flex flex-col  text-seconddary">
           <h1 className='text-3xl font-[700]'>All Users</h1>
+         
+
           {allUser.users.map((user,index)=>{
 return(
 
-          <div key={index}  className="div h-[13vh] px-1 lg:p-10  items-center flex justify-between gap-32 w-fit ">
-            <div className="div h-10 w-20 lg:h-[5vw] overflow-hidden rounded-full lg:w-[5vw] bg-yellow-200">
+          <div key={index}  className="div p-6 lg:h-[13vh] border md:px-10 lg:border-none rounded md:w-fit  md:border md:h-[22vh] lg:p-10  items-center sm:grid-cols-2 grid-cols-1 grid md:grid-cols-2 md:gap-10 lg:grid-cols-4 justify-between sm:gap-10 gap-10 lg:gap-32 w-full ">
+            <div className="div h-20 w-20  sm:w-[13vw] md:w-[5vw] lg:h-[7vw] overflow-hidden rounded-full lg:w-[7vw] ">
               <img className='h-full w-full object-cover ' src="/images/Krishna-Janmashtami--2023-date1_64f79e1e5e4f8.webp" alt="" />
             </div>
-            <h2 className='uppercase text-[10px] lg:text-lg w-10  text-start  lg:w-80 font-[500]'>{user.name}</h2>
-            <h2 className='w-52'>{user.email}</h2>
-            <h2 >{user.phoneNo}</h2>
+            <h2 className='uppercase  md:text-[12px]  text-[15px] lg:text-lg md:w-44 sm:w-20  text-start  lg:w-80 font-[500]'>{user.name}</h2>
+            <h2 className='h-full w-10'>{user.email}</h2>
+            <h2 className='px-10 sm:px-1' >{user.phoneNo}</h2>
           </div>
 )
           })}
+          </div>
 
          </div>
       </div>
-        </div>
+        
   )
 }
 

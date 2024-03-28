@@ -15,6 +15,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 
 import {
+  allFilteredProducts,
   deleteProduct,
   getAllBrands,
   getAllCategories,
@@ -61,7 +62,6 @@ const AdminProducts = () => {
     // }, [totalItems, sort]);
   
     const sortOptions = [
-      { name: "Best Rating", sort: "rating", order: "desc", current: false },
       { name: "Price: Low to High", sort: "price", order: "asc", current: false },
       {
         name: "Price: High to Low",
@@ -72,23 +72,71 @@ const AdminProducts = () => {
     ];
   
     /* filter */
-    const filters = [
-      {
-        id: "Category",
-        name: "Category",
-        options:categories,
-      },
-      {
-        id: "Brand",
-        name: "Brand",
-        options: [],
-      },
-    ];
+       /* filter */
+       const filters = [
+        {
+          id: "Category",
+          name: "Category",
+          options: categories || [],
+        },
+        
+      ];
+      const priceOptions = [
+        { id: 1, value: '10 to 200', options: { minPrice: 10, maxPrice: 200 } },
+        { id: 2, value: '200 to 500', options: { minPrice: 200, maxPrice: 500 } },
+        { id: 3, value: '500 to 1000', options: { minPrice: 500, maxPrice: 1000 } },
+        { id: 4, value: '1000 to 3000', options: { minPrice: 1000, maxPrice: 3000 } },
+        { id: 5, value: '3000 to 5000', options: { minPrice: 3000, maxPrice: 5000 } },
+        { id: 6, value: '5000 to 10000', options: { minPrice: 5000, maxPrice: 10000 } }
+      ];
+      const prices = [
+        {
+          id: "prices",
+          name: "prices",
+          options: priceOptions || [],
+        },
+        
+      ];
+      function classNames(...classes) {
+        return classes.filter(Boolean).join(" ");
+      }
+      const [selectedFilters, setSelectedFilters] = useState({
+        categories: [],
+        colors: [],
+        price: ''
+      });
     
-    function classNames(...classes) {
-      return classes.filter(Boolean).join(" ");
-    }
-    const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+      useEffect(() => {
+        // Fetch products when component mounts and when filters change
+        dispatch(allFilteredProducts(selectedFilters));
+      }, [dispatch, selectedFilters]);
+      const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+      const handleCheckboxChange = (filterType, value) => {
+        setSelectedFilters(prevFilters => ({
+          ...prevFilters,
+          [filterType]: prevFilters[filterType].includes(value)
+            ? prevFilters[filterType].filter(item => item !== value)
+            : [...prevFilters[filterType], value]
+        }));
+      };
+       const handlePriceChange = (filterType, value) => {
+     const { minPrice, maxPrice } = value;
+  const isSelected = selectedFilters.price && 
+                     selectedFilters.price.minPrice === minPrice &&
+                     selectedFilters.price.maxPrice === maxPrice;
+
+  setSelectedFilters(prevFilters => ({
+    ...prevFilters,
+    [filterType]: isSelected
+      ? null
+      : { minPrice, maxPrice }
+  }));
+  };
+    
+    // function classNames(...classes) {
+    //   return classes.filter(Boolean).join(" ");
+    // }
+    // const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   
     /* filter------------------------ */
     function handelFilter(e, section, value) {
@@ -143,7 +191,7 @@ const AdminProducts = () => {
   return (
     <div>
         <div>
-        <div className="bg-white text-seconddary">
+        <div className=" text-seconddary">
           
           <div>
             {/* Mobile filter dialog */}
@@ -235,18 +283,11 @@ const AdminProducts = () => {
                                           className="flex items-center"
                                         >
                                           <input
-                                            id={`filter-mobile-${section.id}-${optionIdx}`}
-                                            name={`${section.id}[]`}
-                                            defaultValue={option.value}
-                                            type="checkbox"
-                                            defaultChecked={option.checked}
-                                            onClick={(e) =>
-                                              handelFilter(
-                                                e,
-                                                section.id,
-                                                option.value
-                                              )
-                                            }
+                                             name={option.value}
+                                      
+                                             type="checkbox"
+                                             checked={selectedFilters.categories.includes(option.value)}
+                                             onChange={() => handleCheckboxChange('categories', option.value)}
                                             className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                                           />
                                           <label
@@ -315,13 +356,13 @@ const AdminProducts = () => {
           ))}
         </div>
       </div>
-            <main className=" w-fit  pt-10 h-fit px-5 sm:px-6 lg:px-10">
+            <main className=" w-full  pt-10 h-fit px-10 sm:px-6 md:px-10 lg:px-20">
               <div className="flex pl-10 items-baseline justify-between border-b border-gray-200 pb-6 ">
-                <h1 className="text-4xl font-bold tracking-tight text-gray-900">
+                <h1 className="lg:text-4xl sm:text-base font-bold tracking-tight text-gray-900">
                   Admin Products
                 </h1>
 
-                <div className="flex  items-center">
+                <div className="flex  w-28 lg:w-fit sm:w-20 items-center">
                   <Menu as="div" className="relative inline-block text-left">
                     <div>
                       <Menu.Button className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
@@ -402,20 +443,20 @@ const AdminProducts = () => {
                       className="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900"
                     ></ul>
 
-                    {filters.map((section,index) => (
+{filters.map((section) => (
                       <Disclosure
                         as="div"
-                        key={index}
+                        key={section.id}
                         className="border-b border-gray-200 py-6"
                       >
                         {({ open }) => (
                           <>
                             <h3 className="-my-3 flow-root">
-                              <Disclosure.Button className="flex  items-center w-full justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
+                              <Disclosure.Button className="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
                                 <span className="font-medium text-gray-900">
                                   {section.name}
                                 </span>
-                                <span className=" flex items-center">
+                                <span className="ml-6 flex items-center">
                                   {open ? (
                                     <MinusIcon
                                       className="h-5 w-5"
@@ -431,32 +472,26 @@ const AdminProducts = () => {
                               </Disclosure.Button>
                             </h3>
                             <Disclosure.Panel className="pt-6">
-                              <div className="space-y-4">
-                                { section?.options?.map((option, optionIdx) => (
+                            <div className="space-y-4">
+                                {section?.options?.map((option, optionIdx) => (
                                   <div
                                     key={option.value}
                                     className="flex items-center"
                                   >
                                     <input
-                                      id={`filter-${section.id}-${optionIdx}`}
-                                      name={`${section.id}[]`}
-                                      defaultValue={option.value}
+                                     
+                                      name={option.value}
+                                      
                                       type="checkbox"
-                                      defaultChecked={option.checked}
-                                      onClick={(e) =>
-                                        handelFilter(
-                                          e,
-                                          section.id,
-                                          option.value
-                                        )
-                                      }
+                                      checked={selectedFilters.categories.includes(option.value)}
+                                      onChange={() => handleCheckboxChange('categories', option.value)}
                                       className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                                     />
                                     <label
                                       htmlFor={`filter-${section.id}-${optionIdx}`}
                                       className="ml-3 text-sm text-gray-600"
                                     >
-                                      {option.label}
+                                      {option.value}
                                     </label>
                                   </div>
                                 ))}

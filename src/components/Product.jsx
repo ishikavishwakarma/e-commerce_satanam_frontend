@@ -202,7 +202,10 @@ const Product = () => {
                       <div className="div">
                       <h3  className="text-xl font-[500]">Highlights</h3>
                       {/* <p>{product.description}</p> */}
-                      <p><li></li></p>
+                      {product.highlights?.map((highlight, index) => (
+        <p key={index}>{highlight}</p>
+      ))}
+                      {/* <p><li></li></p> */}
                       </div>
                       
           </div>

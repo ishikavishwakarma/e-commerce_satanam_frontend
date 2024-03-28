@@ -327,7 +327,7 @@ const AdminDashboard = () => {
                       </th>
                       <th className="border-b border-blue-gray-50 py-3 px-6 text-left">
                         <p className="block antialiased font-sans text-lg font-medium uppercase ">
-                          Brand
+                          Categories
                         </p>
                       </th>
                       <th className="border-b border-blue-gray-50 py-3 px-6 text-left">
@@ -356,8 +356,8 @@ const AdminDashboard = () => {
                       </td>
                       <td className="py-3 px-5 border-b border-blue-gray-50">
                         <div className="flex items-center gap-4">
-                          <p className="block antialiased font-sans text-base leading-normal font-[600]">
-                            {product.brand}
+                          <p className="block uppercase antialiased font-sans text-base leading-normal font-[600]">
+                            {product.category}
                           </p>
                         </div>
                       </td>
